@@ -7,4 +7,4 @@ clear:
 	rm -f boot/boot.img
 
 run:
-	qemu-system-x86_64
+	qemu-system-x86_64 ./boot/boot.img
