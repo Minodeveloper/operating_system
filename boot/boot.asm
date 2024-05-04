@@ -4,9 +4,14 @@
 section code
 
 .init:
+    mov eax, 0x7c0
+    mov ds,  eax
     mov eax, 0xb800
     mov es,  eax
     mov eax, 0;
+    mov ebx, 0;
+    mov ecx, 0;
+    mov dl,  0;
 
 
 .clear:
@@ -18,11 +23,35 @@ section code
     cmp eax, 2 * 25 * 80
     jl .clear
 
-.main:
-    mov byte[es:0x00], 'H';
-    mov byte[es:0x01], 0xA0;
-            
+mov eax, text
+mov ecx, 3 * 2 * 80
+push .end
+call .print
+
+
+.end:
     jmp $
+
+.print:
+    mov dl, byte [eax + ebx]
+    
+    cmp dl, 0
+    je .print_end
+
+    mov byte[es:ecx], dl
+
+    inc ebx
+    inc ecx
+    inc ecx
+
+    jmp .print
+
+.print_end:
+    ret
+
+text: db "Hello, World!",0x0a,0
+text1: db "This is another text", 0
+            
 
     times 510 - ($-$$) db 0x00;
 
