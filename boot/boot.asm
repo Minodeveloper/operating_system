@@ -1,3 +1,36 @@
+[org 0x7c00]
+[bits 16]
+
+section code
+
+.init:
+    mov eax, 0xb800
+    mov es, eax
+    mov eax, 0 ; set eax to 0 -> i = 0
+    mov ebx, 0 ; Index of the character in the string that we are printing
+    mov ecx, 0 ; Actual address of the chracter on the screen memory
+    mov dl, 0 ; Actual value of the character that we are printing
+
+.clear:
+    mov byte [es:eax], 0
+    inc eax
+    mov byte [es:eax], 0xB0
+    inc eax
+
+    cmp eax, 2 * 25 * 80
+
+    jl .clear
+
+
+mov eax, welcome
+mov ecx, 0 * 2 * 80
+call .print
+
+jmp .switch
+
+.print:
+    mov ebx, 0
+
 .print_main:
     mov dl, byte [eax + ebx]
     
